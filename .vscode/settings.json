@@ -1,0 +1,35 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "files.exclude": {
+        "**/*.g.dart": false,
+        "**/.git": false,
+    },
+    // Hides the forward button on Macbook touch bars
+    "keyboard.touchbar.ignored": [
+        "workbench.action.navigateForward",
+        "_flutter.screenshot.touchBar",
+    ],
+    "dart.previewFlutterUiGuides": true,
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": false
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "*.dart": "$(capture).g.dart, $(capture).freezed.dart",
+    },
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+    },
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+}
