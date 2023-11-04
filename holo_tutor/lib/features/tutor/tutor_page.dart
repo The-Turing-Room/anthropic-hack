@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holo_tutor/core/components/brand_text.dart';
-import 'package:holo_tutor/features/chat/chat.dart';
+import 'package:holo_tutor/features/chat/chat_ui.dart';
 
 class TutorPage extends StatelessWidget {
   static const String path = '/tutor';
@@ -9,11 +9,11 @@ class TutorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('tutor')),
+      appBar: AppBar(title: const BrandText()),
       body: const Row(
         children: [
-          Expanded(flex: 4, child: MainPanel()),
-          Expanded(flex: 1, child: ChatPanel())
+          Expanded(flex: 5, child: MainPanel()),
+          Expanded(flex: 2, child: ChatPanel())
         ],
       ),
     );
@@ -25,6 +25,9 @@ class MainPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CircularProgressIndicator();
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Card(child: Placeholder()),
+    );
   }
 }
