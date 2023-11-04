@@ -24,7 +24,19 @@ abstract class ChatApi {
   Future<ChatResponse> nextMessage({
     required String message,
     required List<ChatMessage> history,
+    int? pdfPage,
   });
+}
+
+class BespokeChatApi extends ChatApi {
+  @override
+  Future<ChatResponse> nextMessage({
+    required String message,
+    required List<ChatMessage> history,
+    int? pdfPage,
+  }) async {
+    return ChatResponse(message: message);
+  }
 }
 
 class OpenAIChatApi extends ChatApi {
@@ -48,6 +60,7 @@ class OpenAIChatApi extends ChatApi {
   Future<ChatResponse> nextMessage({
     required String message,
     required List<ChatMessage> history,
+    int? pdfPage,
   }) async {
     await _initCompleter.future;
     final response = await OpenAI.instance.chat.create(

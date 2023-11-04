@@ -13,5 +13,5 @@ final router = GoRouter(
       builder: (context, state) => const TutorPage(),
     ),
   ],
-  initialLocation: TutorPage.path,
+  initialLocation: HomePage.path,
 );
