@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:holo_tutor/home_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:holo_tutor/core/navigation/navigation.dart';
 
 void main() {
   runApp(const HoloTutorApp());
@@ -10,13 +11,20 @@ class HoloTutorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Holo Tutor',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green.shade300,
+          brightness: Brightness.dark,
+          surfaceTint: Colors.transparent,
+        ),
         useMaterial3: true,
+        fontFamily: GoogleFonts.chakraPetch().fontFamily,
       ),
-      home: const HomePage(),
     );
   }
 }

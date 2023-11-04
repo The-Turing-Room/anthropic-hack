@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Dev MacOS",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "macos",
+            "program": "holo_tutor/lib/main.dart",
+            "args": [
+                "--dart-define=DEV_BUILD=true"
+            ]
+        },
+        {
             "name": "Dev Mobile",
             "request": "launch",
             "type": "dart",
@@ -29,7 +39,7 @@
             "name": "Dev Web",
             "request": "launch",
             "type": "dart",
-            "program": "holo_tutor/lib/main_web.dart",
+            "program": "holo_tutor/lib/main.dart",
             "deviceId": "chrome",
             "args": [
                 "--dart-define=FLUTTER_WEB_USE_SKIA=true",
@@ -40,16 +50,6 @@
                 "localhost",
                 "--web-port",
                 "5000",
-                "--dart-define=DEV_BUILD=true"
-            ]
-        },
-        {
-            "name": "Dev MacOS",
-            "request": "launch",
-            "type": "dart",
-            "deviceId": "macos",
-            "program": "holo_tutor/lib/main_macos.dart",
-            "args": [
                 "--dart-define=DEV_BUILD=true"
             ]
         }
