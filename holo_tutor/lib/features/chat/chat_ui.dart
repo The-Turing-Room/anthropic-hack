@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:holo_tutor/core/state.dart';
 import 'package:holo_tutor/features/chat/chat_api.dart';
 
 class ChatNotifier extends ChangeNotifier {
   final List<ChatMessage> history = [];
   final ChatApi chatApi = BespokeChatApi();
 
-  Future<void> sendMessage(String message) async {
+  Future<void> sendMessage(String message, int? pdfPage) async {
     history.add(ChatMessage(
       role: ChatMessageRole.user,
       message: message,
@@ -26,6 +27,7 @@ class ChatNotifier extends ChangeNotifier {
       response = await chatApi.nextMessage(
         message: message,
         history: history,
+        pdfPage: pdfPage,
       );
     } finally {
       response ??= ChatResponse(
@@ -70,6 +72,7 @@ class ChatPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatNotifier = ref.watch(chatProvider);
+    final state = ref.watch(stateProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -93,7 +96,7 @@ class ChatPanel extends ConsumerWidget {
           //   ),
           // ],
           onSendPressed: (text) {
-            chatNotifier.sendMessage(text.text);
+            chatNotifier.sendMessage(text.text, state.pdfPage);
           },
           user: _user,
         ),

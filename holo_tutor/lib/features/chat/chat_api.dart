@@ -59,7 +59,10 @@ class BespokeChatApi extends ChatApi {
     required List<ChatMessage> history,
     int? pdfPage,
   }) async {
-    final formatted = _formatHistory(history);
+    final formatted = _formatHistory(history.sublist(history.length - 2));
+    print('');
+    print(formatted);
+    print('');
     // messages, slide_number
 
     final response = await http.post(
@@ -80,9 +83,9 @@ class BespokeChatApi extends ChatApi {
     // replace all characters with a code unit < ' '.codeUnit with a dollar sign
 
     final decoded = jsonDecode(response.body) as Map<String, dynamic>;
-    decoded['content'] = jsonDecode(decoded['content']) as List<dynamic>;
+    // decoded['content'] = jsonDecode(decoded['content']) as List<dynamic>;
     var responseMessage = m.Response.fromJson(decoded);
-    final content = responseMessage.content[0].text;
+    final content = responseMessage.content;
 
     // var responseMessage = response.body.replaceAllMapped(
     //   RegExp(r'[\x00-\x1F]'),

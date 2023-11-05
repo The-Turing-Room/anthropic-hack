@@ -8,9 +8,7 @@ part of 'models.dart';
 
 Response _$ResponseFromJson(Map<String, dynamic> json) => Response(
       success: json['success'] as bool,
-      content: (json['content'] as List<dynamic>)
-          .map((e) => Content.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      content: json['content'] as String,
     );
 
 Map<String, dynamic> _$ResponseToJson(Response instance) => <String, dynamic>{

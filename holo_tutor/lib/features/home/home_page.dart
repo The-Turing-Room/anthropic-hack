@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:holo_tutor/core/components/brand_text.dart';
 import 'package:holo_tutor/core/state.dart';
-import 'package:holo_tutor/core/theme/theme.dart';
 import 'package:holo_tutor/features/tutor/tutor_page.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as pth;
 
 class HomePage extends ConsumerWidget {
   static const String path = '/';
@@ -20,8 +22,6 @@ class HomePage extends ConsumerWidget {
       formats: Formats.standardFormats,
       hitTestBehavior: HitTestBehavior.opaque,
       onDropOver: (DropOverEvent event) async {
-        print('dropping');
-        print(event.session.items.first.platformFormats);
         return DropOperation.copy;
       },
       onPerformDrop: (PerformDropEvent event) async {
@@ -33,36 +33,23 @@ class HomePage extends ConsumerWidget {
           final pdf = await file.readAll();
           state.pdfBytes = pdf;
           print('set pdf');
+          // Save pdf to tmp directory
+          final tmpDir = await getTemporaryDirectory();
+          final pdfPath = pth.join(tmpDir.path, 'lecture1.pdf');
+          final pdfFile = File(pdfPath);
+          await pdfFile.writeAsBytes(pdf);
+          state.pdfFilePath = pdfPath;
+          print('Saved pdf to path: $pdfPath');
           router.push(TutorPage.path);
+          state.uploadPdf();
         });
       },
       child: Scaffold(
-          appBar: AppBar(title: const BrandText()),
-          body: const Center(
-            child: Text('Drag a PDF file to start'),
-          )
-          // body: Column(
-          // children: [
-          // Center(
-          //   child: SizedBox(
-          //     width: MediaQuery.of(context).size.width * 0.3,
-          //     height: MediaQuery.of(context).size.width * 0.3,
-          //     child: Card(
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(8),
-          //         side: const BorderSide(
-          //           color: AppTheme.primary,
-          //           width: 4,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(height: 16),
-          // ElevatedButton(onPressed: () {}, child: const Text('UPLOAD PDF'))
-          // ],
-          // ),
-          ),
+        appBar: AppBar(title: const BrandText()),
+        body: const Center(
+          child: Text('Drag a PDF file to start'),
+        ),
+      ),
     );
   }
 }

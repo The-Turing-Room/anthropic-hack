@@ -6,7 +6,7 @@ part 'models.g.dart';
 @JsonSerializable()
 class Response {
   final bool success;
-  final List<Content> content;
+  final String content;
 
   Response({required this.success, required this.content});
 

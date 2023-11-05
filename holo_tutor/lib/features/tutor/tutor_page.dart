@@ -38,17 +38,21 @@ class _MainPanelState extends ConsumerState<MainPanel> {
 
   void nextPage() {
     _pdfController.nextPage();
+    final state = ref.read(stateProvider);
+    state.pdfPage = currentPage;
   }
 
   void previousPage() {
     _pdfController.previousPage();
+    final state = ref.read(stateProvider);
+    state.pdfPage = currentPage;
   }
 
   int get currentPage => _pdfController.pageNumber;
 
   @override
   Widget build(BuildContext context) {
-    final AppStateNotifier state = ref.watch(stateProvider);
+    final state = ref.watch(stateProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
