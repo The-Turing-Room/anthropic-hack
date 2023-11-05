@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_date/dart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,8 +66,9 @@ class _MainPanelState extends ConsumerState<MainPanel> {
                 aspectRatio: 4 / 3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(0),
-                  child: SfPdfViewer.memory(
-                    state.pdfBytes,
+                  child: SfPdfViewer.file(
+                    File(state.pdfFilePath),
+                    // state.pdfBytes,
                     // canShowScrollStatus: false,
                     pageLayoutMode: PdfPageLayoutMode.single,
                     controller: _pdfController,

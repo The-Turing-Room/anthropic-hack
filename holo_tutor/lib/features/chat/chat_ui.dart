@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:elevenlabs_flutter/elevenlabs_config.dart';
+import 'package:elevenlabs_flutter/elevenlabs_flutter.dart';
+import 'package:elevenlabs_flutter/elevenlabs_types.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -9,9 +13,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:holo_tutor/core/state.dart';
 import 'package:holo_tutor/features/chat/chat_api.dart';
 
+final elevenLabs = ElevenLabsAPI();
+
 class ChatNotifier extends ChangeNotifier {
   final List<ChatMessage> history = [];
   final ChatApi chatApi = BespokeChatApi();
+
+  static Future<void> init() async {
+    await elevenLabs.init(
+      config: const ElevenLabsConfig(
+        apiKey: 'ddc884fa6cea52ddb18d3c194cceaeef',
+      ),
+    );
+  }
 
   Future<void> sendMessage(String message, int? pdfPage) async {
     history.add(ChatMessage(
@@ -35,6 +49,12 @@ class ChatNotifier extends ChangeNotifier {
       );
     }
 
+    // try {
+    await playMessage(response.message);
+    // } catch (e) {
+    //   print('Error playing message: $e');
+    // }
+
     history.add(ChatMessage(
       role: ChatMessageRole.assistant,
       message: response.message,
@@ -42,6 +62,19 @@ class ChatNotifier extends ChangeNotifier {
     ));
 
     notifyListeners();
+  }
+
+  Future<void> playMessage(String message) async {
+    print('playing message at elevenlabs');
+    final file = await elevenLabs.synthesize(
+      TextToSpeechRequest(
+        text: message,
+        voiceId: 'Yko7PKHZNXotIFUBG7I9',
+      ),
+    );
+    print('got audio file at path: ${file.path}');
+    final player = AudioPlayer();
+    player.play(DeviceFileSource(file.path));
   }
 }
 

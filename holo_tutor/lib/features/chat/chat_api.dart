@@ -59,7 +59,8 @@ class BespokeChatApi extends ChatApi {
     required List<ChatMessage> history,
     int? pdfPage,
   }) async {
-    final formatted = _formatHistory(history.sublist(history.length - 2));
+    final formatted = _formatHistory(
+        history.sublist(history.length > 2 ? history.length - 2 : 0));
     print('');
     print(formatted);
     print('');

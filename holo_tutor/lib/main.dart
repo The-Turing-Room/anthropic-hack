@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:holo_tutor/core/navigation/navigation.dart';
+import 'package:holo_tutor/features/chat/chat_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-void main() {
+void main() async {
+  await ChatNotifier.init();
   runApp(const HoloTutorApp());
 }
 

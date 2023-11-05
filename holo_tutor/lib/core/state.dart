@@ -16,6 +16,8 @@ class AppStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  String get pdfFilePath => _pdfFilePath;
+
   int pdfPage = 1;
 
   Uint8List get pdfBytes => _pdfBytes;
