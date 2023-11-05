@@ -10,7 +10,7 @@ import 'package:holo_tutor/features/chat/chat_api.dart';
 
 class ChatNotifier extends ChangeNotifier {
   final List<ChatMessage> history = [];
-  final ChatApi chatApi = OpenAIChatApi();
+  final ChatApi chatApi = BespokeChatApi();
 
   Future<void> sendMessage(String message) async {
     history.add(ChatMessage(

@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dart_openai/dart_openai.dart';
+import 'package:http/http.dart' as http;
+import 'package:holo_tutor/features/chat/models.dart' as m;
 
 // TODO convert to freezed model
 class ChatMessage {
@@ -28,14 +31,74 @@ abstract class ChatApi {
   });
 }
 
+const CHAT_ENDPOINT = 'http://localhost:5000/chat/';
+
 class BespokeChatApi extends ChatApi {
+  String _formatHistory(List<ChatMessage> history) {
+    /*  messages should be in the format:
+    User: <message>
+    Assistant: <message>
+    User: <message>
+    ...
+    */
+
+    final str = StringBuffer();
+    for (final message in history) {
+      str.write(
+        message.role == ChatMessageRole.user ? 'User: ' : 'Assistant: ',
+      );
+      str.write(message.message);
+      str.write('\n');
+    }
+    return str.toString();
+  }
+
   @override
   Future<ChatResponse> nextMessage({
     required String message,
     required List<ChatMessage> history,
     int? pdfPage,
   }) async {
-    return ChatResponse(message: message);
+    final formatted = _formatHistory(history);
+    // messages, slide_number
+
+    final response = await http.post(
+      Uri.parse(CHAT_ENDPOINT),
+      body: jsonEncode({
+        'messages': formatted,
+        'slide_number': pdfPage?.toString() ?? '1',
+      }),
+    );
+    print('Got response with status: ${response.statusCode}');
+    if (response.statusCode != 200) {
+      return ChatResponse(
+        message: 'Sorry, an error occured while processing your message.',
+      );
+    }
+
+    print('Response body: ${response.body}');
+    // replace all characters with a code unit < ' '.codeUnit with a dollar sign
+
+    final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+    decoded['content'] = jsonDecode(decoded['content']) as List<dynamic>;
+    var responseMessage = m.Response.fromJson(decoded);
+    final content = responseMessage.content[0].text;
+
+    // var responseMessage = response.body.replaceAllMapped(
+    //   RegExp(r'[\x00-\x1F]'),
+    //   (match) => '\$',
+    // );
+
+    // replace double line breaks with single line breaks
+    // responseMessage = responseMessage.replaceAll(RegExp(r'\n\n'), '\n');
+
+    // final json = jsonDecode(responseMessage);
+
+    // final content = jsonDecode(json['content'])[0]['text'];
+    // final responseData = jsonDecode([0]);
+    // [0]['text'] as String;
+    // print(responseMessage);
+    return ChatResponse(message: content);
   }
 }
 
